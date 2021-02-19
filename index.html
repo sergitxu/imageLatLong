@@ -1,0 +1,77 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Image Latitude and longitude printer</title>
+  <meta name="description" content="Image Latitude and longitude printer">
+  <meta name="author" content="Sergitxu">
+  <style>
+      #Coordenadas{
+          position: absolute;
+          top: 38px;
+          left: 20px;
+          background: #FFF;
+          padding: 10px;
+      }
+  </style>
+
+</head>
+
+<body>
+    <form>
+      <label for="imageToLoad">Upload your image:</label>
+      <input type="file" id="imageToLoad" name="imageToLoad" accept="image/gif, image/jpeg, image/png" onchange="loadImage(event)" style="display:none;">
+      <!-- 
+            <label for="imageUrl">Introduce the image url<label>
+            <input type="text" id="imageUrl" name="imageUrl" onchange="loadImageUrl(event)">
+        -->
+    </form>
+    <img id="imageToExtract" src="">
+
+    <div id="Coordenadas"></div>
+
+    <script type="text/javascript" src="node_modules/exif-js/exif.js"></script>
+      <script>
+            "use strict";
+            //window.onload=getExif;
+    
+            function getExif() {
+                let img = document.getElementById("imageToExtract");
+                EXIF.getData(img, function() {
+                    //var allTags = EXIF.getAllTags(this);
+                    var Coordenadas = document.getElementById("Coordenadas");
+                    var gpsTags = EXIF.getTag(this, "GPSTags");
+                    var long = EXIF.getTag(this, "GPSLongitude");
+                    var longRef = EXIF.getTag(this, "GPSLongitudeRef");
+                    var lat = EXIF.getTag(this, "GPSLatitude");
+                    var latRef = EXIF.getTag(this, "GPSLatitudeRef");
+                    let longitud = JSON.stringify(long);
+                    let latitud = JSON.stringify(lat);
+                    Coordenadas.innerHTML = `
+                        Longitud: ${longitud} ${longRef}<br>
+                        Latitud: ${latitud} ${latRef}<br>
+                        `;
+                });
+            }
+           
+                var loadImage = function(event) {
+                    var image = document.getElementById('imageToExtract');
+                    image.src = URL.createObjectURL(event.target.files[0]);
+                    
+                    setTimeout(getExif, 1000);
+                };
+            
+                /*
+                var loadImageUrl = function(evento) {
+                    console.log('patata');
+                    var imageURL = document.getElementById('imageToExtract');
+                    console.log(imageURL);
+                };
+                */
+            
+        </script>
+  
+</body>
+</html>
