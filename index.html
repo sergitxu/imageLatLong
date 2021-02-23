@@ -27,7 +27,6 @@
             let getExif = () => {
                 let img = document.getElementById("imageToExtract");
                 EXIF.getData(img, function() {
-                    //var allTags = EXIF.getAllTags(this);
                     let coords = document.getElementById("coordenadas");
                     let gpsTags = EXIF.getTag(this, "GPSTags");
                     let long = EXIF.getTag(this, "GPSLongitude");
@@ -65,6 +64,7 @@
             let printPDF = () => {
                 const $elementoParaConvertir = document.getElementById('imageAndCoords'); // <-- Aquí puedes elegir cualquier elemento del DOM
                 html2pdf()
+                
                     .set({
                         margin: 1,
                         filename: 'documento.pdf',
